@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-
 import unittest
 from collections import deque
 
-
 def nbSommets(G):
     return len(G.keys())
-
 
 def largeur(G, i):
     Visite = set()
@@ -26,7 +23,6 @@ def largeur(G, i):
         File.popleft()
 
     return ordreVisite
-
 
 def largeur2(G, i):
     Visite = set()
@@ -58,7 +54,6 @@ def largeurG(G):
                     ordreVisite.append(e)
 
     return ordreVisite
-
 
 class GrapheTest(unittest.TestCase):
 
@@ -112,7 +107,6 @@ class GrapheTest(unittest.TestCase):
 
     def testLargeurGeneraliseNonOriente(self):
         self.assertEqual(largeurG(self.Petersen), [1, 2, 5, 6, 3, 7, 4, 10, 8, 9])
-
 
 if __name__ == '__main__':
     unittest.main()

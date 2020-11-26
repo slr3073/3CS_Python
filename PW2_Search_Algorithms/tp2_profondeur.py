@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-
 import unittest
-from tp1_partie1 import nbSommets
-
 
 def profRec(G, i, Visite, ordreVisite):
     Visite.add(i)
@@ -11,13 +8,11 @@ def profRec(G, i, Visite, ordreVisite):
         if j not in Visite:
             profRec(G, j, Visite, ordreVisite)
 
-
 def profond(G, i):
     Visite = set()
     ordreVisite = []
     profRec(G, i, Visite, ordreVisite)
     return ordreVisite
-
 
 def profondG(G):
     Visite = set()
@@ -26,7 +21,6 @@ def profondG(G):
         if x not in Visite:
             profRec(G, x, Visite, ordreVisite)
     return ordreVisite
-
 
 class GrapheTest(unittest.TestCase):
 
@@ -78,7 +72,6 @@ class GrapheTest(unittest.TestCase):
 
     def testProfondeurGeneraliseNonOriente(self):
         self.assertEqual(profondG(self.Petersen), [1, 2, 3, 4, 5, 10, 7, 9, 6, 8])
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,48 +1,37 @@
 #!/usr/bin/env python3
 from collections import deque
-from tp2_profondeur import *
+from PW2_Search_Algorithms.tp2_profondeur import *
 import unittest
 
-G1 = {1: [2], 2: [1, 3, 7], 3: [2], 4: [7], 5: [7], 6: [7], 7: [2, 4, 5, 6]}  # arbre
-G2 = {1: [2, 4], 2: [1, 3, 7], 3: [2], 4: [1, 7], 5: [7], 6: [7], 7: [2, 4, 5, 6]}  # connexe cyclique
-G3 = {1: [2], 2: [1, 3], 3: [2], 4: [7], 5: [7], 6: [7], 7: [4, 5, 6]}  # ni connexe ni cyclique
-G4 = {1: [2], 2: [1, 3], 3: [2], 4: [5, 7], 5: [4, 7], 6: [7], 7: [4, 5, 6]}  # pas connexe cyclique
+def nbSommets(Graphe):
+    return len(Graphe) - 1
 
+def isConnexe(Graphe):
+    return len(Graphe) == len(profond(Graphe, 1))
 
-def nbSommets(G):
-    return len(G) - 1
-
-
-def isConnexe(G):
-    return len(G) == len(profond(G, 1))
-
-
-def cyclicRec(G, i, pere, Visite):
+def cyclicRec(Graphe, i, pere, Visite):
     Visite.add(i)
 
-    for j in G[i]:
-        if j not in Visite:
-            if cyclicRec(G, j, i, Visite):
+    for successeur in Graphe[i]:
+        if successeur not in Visite:
+            if cyclicRec(Graphe, successeur, i, Visite):
                 return True
-        elif j != pere:
+        elif successeur != pere:
             return True
     return False
 
-
-def isCyclic(G):
+def isCyclic(Graphe):
     Visite = set()
-    for s in G:
-        if s not in Visite:
-            if cyclicRec(G, s, s, Visite):
+    for sommet in Graphe:
+        if sommet not in Visite:
+            if cyclicRec(Graphe, sommet, sommet, Visite):
                 return True
     return False
 
+def isArbre(Graphe):
+    return (not isCyclic(Graphe)) & isConnexe(Graphe)
 
-def isArbre(G):
-    return (not isCyclic(G)) & isConnexe(G)
-
-
-def plusCourtChemin(G, sommet):
+def plusCourtChemin(Graphe, sommet):
     Dist = dict()
     Pere = dict()
 
@@ -56,16 +45,15 @@ def plusCourtChemin(G, sommet):
 
     while len(File) != 0:
         s = File[0]
-        for succ in G[s]:
-            if not succ in Visite:
-                Visite.add(succ)
-                File.append(succ)
-                Dist[succ] = Dist[s] + 1
-                Pere[succ] = s
+        for successeur in Graphe[s]:
+            if successeur not in Visite:
+                Visite.add(successeur)
+                File.append(successeur)
+                Dist[successeur] = Dist[s] + 1
+                Pere[successeur] = s
         File.popleft()
 
     return Dist, Pere
-
 
 def cyclicRecOriente(G, sommet, Visite):
     Visite[sommet] = 1  # La visite commence
@@ -81,7 +69,6 @@ def cyclicRecOriente(G, sommet, Visite):
     Visite[sommet] = 2
     return cycle
 
-
 def isCyclicOriente(G):
     Visite = dict()
     for sommet in G:
@@ -89,7 +76,6 @@ def isCyclicOriente(G):
             return True
 
     return cyclicRecOriente(G, 1, Visite)
-
 
 class GrapheTest(unittest.TestCase):
 
@@ -137,7 +123,6 @@ class GrapheTest(unittest.TestCase):
     def testIsCyclicOriente(self):
         self.assertTrue(isCyclicOriente({1: [3, 4, 5, 6], 2: [1], 3: [2, 4], 4: [], 5: [], 6: [4]}))
         self.assertFalse(isCyclicOriente({1: [4, 5, 6], 2: [1], 3: [2, 4], 4: [], 5: [], 6: [4]}))
-
 
 if __name__ == '__main__':
     unittest.main()
