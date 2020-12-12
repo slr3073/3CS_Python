@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import unittest
 
-def nbSommets(Graphe):
+def nbSommets(Graphe: dict):
     return len(Graphe)
 
-def nbAretes(Graphe):
+def nbAretes(Graphe: dict):
     nbLiens = 0
     for sommet in Graphe:
         for successeur in Graphe[sommet]:
@@ -15,7 +15,7 @@ def nbAretes(Graphe):
 
     return int(nbLiens / 2)
 
-def ajoutArete(G, i, j):
+def ajoutArete(G: dict, i: int, j: int):
     if i not in G:
         G[i] = []
     G[i].append(j)
@@ -24,24 +24,24 @@ def ajoutArete(G, i, j):
             G[j] = []
         G[j].append(i)
 
-def enleveArete(G, i, j):
+def enleveArete(G: dict, i: int, j: int):
     if j not in G[i]:
         raise ValueError("L'arête n'existe pas")
     G[i].remove(j)
     if i != j:
         G[j].remove(i)
 
-def deg(Graphe, sommet):
+def deg(Graphe: dict, sommet: int):
     return len(Graphe[sommet])
 
-def degre(Graphe):
+def degre(Graphe: dict):
     result = {}
     for sommet in Graphe:
         result[sommet] = len(Graphe[sommet])
 
     return result
 
-def kuratowski(n):
+def kuratowski(n: int):
     result = {}
     for i in range(1, n + 1):
         successeur = []
@@ -52,7 +52,7 @@ def kuratowski(n):
 
     return result
 
-def areteToListe(L):
+def areteToListe(L: set):
     G = {}
     for arete in L:
         s1 = arete[0]
@@ -68,7 +68,7 @@ def areteToListe(L):
                 G[s2] = [s1]
     return G
 
-def listeToMatrice(G, n):
+def listeToMatrice(G: dict, n: int):
     M = [[0 for _ in range(n)] for _ in range(n)]
     for k in G:
         for v in G[k]:

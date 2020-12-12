@@ -1,49 +1,47 @@
 #!/usr/bin/env python3
 from collections import deque
-from PW1_Graphe_Represantations.tp1_partie2 import *
+from PW1_Graphe_Represantations.PW1_P2 import *
 
-def triTopo(Graphe):
+def triTopo(Graphe: dict):
     result = []
     degreEntrant = degreE(Graphe)
     sources = deque()
 
-    for sommet in degreEntrant:
+    for sommet in Graphe:
         if degreEntrant[sommet] == 0:
             sources.append(sommet)
 
     while sources:
-        source = sources[0]
-        sources.popleft()
+        source = sources.popleft()
         result.append(source)
         for successeur in Graphe[source]:
             degreEntrant[successeur] -= 1
             if degreEntrant[successeur] == 0:
                 sources.append(successeur)
 
-    if len(result) != len(degreEntrant):
-        raise RuntimeError('Graphe cylique tri topologique impossible')
+    if len(result) != len(Graphe):
+        raise RuntimeError
 
     return result
 
-def triNiveaux(Graphe):
+def triNiveaux(Graphe: dict):
     result = []
     degreEntrant = degreE(Graphe)
-    Niveau1 = set()
+    niveau = set()
 
-    for sommet in degreEntrant:
+    for sommet in Graphe:
         if degreEntrant[sommet] == 0:
-            Niveau1.add(sommet)
+            niveau.add(sommet)
 
-    while Niveau1:
-        result.append(Niveau1)
-        Niveau2 = set()
-        for sources in Niveau1:
-            for successeur in Graphe[sources]:
+    while niveau:
+        result.append(niveau)
+        nextNiveau = set()
+        for sommet in niveau:
+            for successeur in Graphe[sommet]:
                 degreEntrant[successeur] -= 1
                 if degreEntrant[successeur] == 0:
-                    Niveau2.add(successeur)
-
-        Niveau1 = Niveau2
+                    nextNiveau.add(successeur)
+        niveau = nextNiveau
 
     return result
 

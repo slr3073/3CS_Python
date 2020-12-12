@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 import unittest
 
-def profRec(G, i, Visite, ordreVisite):
+def profRec(Graphe: dict, i: int, Visite: set, ordreVisite: list):
     Visite.add(i)
     ordreVisite.append(i)
-    for j in G[i]:
+    for j in Graphe[i]:
         if j not in Visite:
-            profRec(G, j, Visite, ordreVisite)
+            profRec(Graphe, j, Visite, ordreVisite)
 
-def profond(G, i):
+def profond(Graphe: dict, i: int):
     Visite = set()
     ordreVisite = []
-    profRec(G, i, Visite, ordreVisite)
+    profRec(Graphe, i, Visite, ordreVisite)
     return ordreVisite
 
-def profondG(G):
+def profondG(Graphe: dict):
     Visite = set()
     ordreVisite = []
-    for x in G:
+    for x in Graphe:
         if x not in Visite:
-            profRec(G, x, Visite, ordreVisite)
+            profRec(Graphe, x, Visite, ordreVisite)
     return ordreVisite
 
 class GrapheTest(unittest.TestCase):

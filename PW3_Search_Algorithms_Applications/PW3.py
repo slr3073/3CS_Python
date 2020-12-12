@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 from collections import deque
-from PW2_Search_Algorithms.tp2_profondeur import *
+from PW2_Search_Algorithms.PW2_profondeur import *
 import unittest
 
-def nbSommets(Graphe):
+def nbSommets(Graphe: dict):
     return len(Graphe) - 1
 
-def isConnexe(Graphe):
+def isConnexe(Graphe: dict):
     return len(Graphe) == len(profond(Graphe, 1))
 
-def cyclicRec(Graphe, i, pere, Visite):
+def cyclicRec(Graphe: dict, i: int, pere: int, Visite: set):
     Visite.add(i)
 
     for successeur in Graphe[i]:
@@ -20,7 +20,7 @@ def cyclicRec(Graphe, i, pere, Visite):
             return True
     return False
 
-def isCyclic(Graphe):
+def isCyclic(Graphe: dict):
     Visite = set()
     for sommet in Graphe:
         if sommet not in Visite:
@@ -28,10 +28,10 @@ def isCyclic(Graphe):
                 return True
     return False
 
-def isArbre(Graphe):
+def isArbre(Graphe: dict):
     return (not isCyclic(Graphe)) & isConnexe(Graphe)
 
-def plusCourtChemin(Graphe, sommet):
+def plusCourtChemin(Graphe: dict, sommet: int):
     Dist = dict()
     Pere = dict()
 
@@ -55,27 +55,27 @@ def plusCourtChemin(Graphe, sommet):
 
     return Dist, Pere
 
-def cyclicRecOriente(G, sommet, Visite):
+def cyclicRecOriente(Graphe: dict, sommet: int, Visite: set):
     Visite[sommet] = 1  # La visite commence
     cycle = False
-    for succ in G[sommet]:
+    for succ in Graphe[sommet]:
         if cycle:
             return True
         if succ not in Visite:
-            cycle = cyclicRecOriente(G, succ, Visite)
+            cycle = cyclicRecOriente(Graphe, succ, Visite)
         elif Visite[succ] == 1:
             return True
 
     Visite[sommet] = 2
     return cycle
 
-def isCyclicOriente(G):
+def isCyclicOriente(Graphe: dict):
     Visite = dict()
-    for sommet in G:
-        if cyclicRecOriente(G, sommet, Visite):
+    for sommet in Graphe:
+        if cyclicRecOriente(Graphe, sommet, Visite):
             return True
 
-    return cyclicRecOriente(G, 1, Visite)
+    return cyclicRecOriente(Graphe, 1, Visite)
 
 class GrapheTest(unittest.TestCase):
 

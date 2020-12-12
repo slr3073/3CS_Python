@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 import unittest
 
-def nbSommets(Graphe):
+def nbSommets(Graphe: dict):
     return len(Graphe)
 
-def nbArcs(Graphe):
+def nbArcs(Graphe: dict):
     nbLiens = 0
     for sommet in Graphe:
         for _ in Graphe[sommet]:
             nbLiens += 1
     return nbLiens
 
-def ajoutArc(Graphe, sommet1, sommet2):
+def ajoutArc(Graphe: dict, sommet1: int, sommet2: int):
     Graphe[sommet1].append(sommet2)
 
-def enleveArc(Graphe, sommet1, sommet2):
+def enleveArc(Graphe: dict, sommet1: int, sommet2: int):
     if sommet2 == sommet1:
         if sommet1 in Graphe[sommet1]:
             Graphe[sommet1].remove(sommet1)
@@ -26,17 +26,17 @@ def enleveArc(Graphe, sommet1, sommet2):
         else:
             raise ValueError("L'arc n'existe pas")
 
-def degS(Graphe, sommet):
+def degS(Graphe: dict, sommet: int):
     return len(Graphe[sommet])
 
-def degreS(Graphe):
+def degreS(Graphe: dict):
     result = dict()
     for sommet in Graphe:
         result[sommet] = len(Graphe[sommet])
 
     return result
 
-def degE(G, i):
+def degE(G: dict, i: int):
     result = 0
     for sommet in G:
         for successeur in G[sommet]:
@@ -45,14 +45,14 @@ def degE(G, i):
 
     return result
 
-def degreE(G):
+def degreE(G: dict):
     result = dict()
     for k in G:
         result[k] = degE(G, k)
 
     return result
 
-def listeToMatrice(G):
+def listeToMatrice(G: dict):
     n = len(G)
     M = [[0 for _ in range(n)] for _ in range(n)]
     for k in G:
@@ -61,7 +61,7 @@ def listeToMatrice(G):
 
     return M
 
-def arcsToListe(L):
+def arcsToListe(L: set):
     G = {}
     for arc in L:
         s = arc[0]
@@ -72,7 +72,7 @@ def arcsToListe(L):
             G[s] = [e]
     return G
 
-def matToListe(M):
+def matToListe(M: list):
     L = {}
     for i in range(len(M)):
         liste = []

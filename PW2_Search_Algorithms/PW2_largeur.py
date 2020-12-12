@@ -2,10 +2,10 @@
 import unittest
 from collections import deque
 
-def nbSommets(G):
-    return len(G.keys())
+def nbSommets(Graphe: dict):
+    return len(Graphe.keys())
 
-def largeur(G, i):
+def largeur(Graphe: dict, i: int):
     Visite = set()
     File = deque()
     ordreVisite = []
@@ -16,7 +16,7 @@ def largeur(G, i):
     while len(File) != 0:
         k = File[0]
         ordreVisite.append(k)
-        for e in G[k]:
+        for e in Graphe[k]:
             if e not in Visite:
                 Visite.add(e)
                 File.append(e)
@@ -24,7 +24,7 @@ def largeur(G, i):
 
     return ordreVisite
 
-def largeur2(G, i):
+def largeur2(Graphe: dict, i: int):
     Visite = set()
     File = deque()
     ordreVisite = []
@@ -35,7 +35,7 @@ def largeur2(G, i):
     while File:
         sommetVisite = File[0]
         ordreVisite.append(sommetVisite)
-        for voisin in G[sommetVisite]:
+        for voisin in Graphe[sommetVisite]:
             if voisin not in Visite:
                 File.append(voisin)
                 Visite.add(voisin)
@@ -43,12 +43,12 @@ def largeur2(G, i):
         File.popleft()
     return ordreVisite
 
-def largeurG(G):
+def largeurG(Graphe: dict):
     ordreVisite = []
 
-    for k in G:
+    for k in Graphe:
         if k not in ordreVisite:
-            newOrdreVisite = largeur(G, k)
+            newOrdreVisite = largeur(Graphe, k)
             for e in newOrdreVisite:
                 if e not in ordreVisite:
                     ordreVisite.append(e)

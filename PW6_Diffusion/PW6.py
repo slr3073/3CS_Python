@@ -1,9 +1,8 @@
 import unittest
-from PW1_Graphe_Represantations.tp1_partie1 import nbSommets, ajoutArete, enleveArete
-from PW3_Search_Algorithms_Applications.tp3 import cyclicRec, isCyclic
-import math
+from PW1_Graphe_Represantations.PW1_P1 import ajoutArete, enleveArete
+from PW3_Search_Algorithms_Applications.PW3 import isCyclic
 
-def areteToListe(ListeArr):
+def areteToListe(ListeArr: list):
     Poids = dict()
     Graphe = dict()
 
@@ -23,7 +22,7 @@ def areteToListe(ListeArr):
 
     return Graphe, Poids
 
-def Kruskal(nbSommet, ListeArr):
+def Kruskal(nbSommet: int, ListeArr: list):
     result = dict()
     poid = 0
 
@@ -40,7 +39,7 @@ def Kruskal(nbSommet, ListeArr):
 
     return result, poid
 
-def Prim(ListeArr):
+def Prim(ListeArr: list):
     result = dict()
     Graphe, Poids = areteToListe(ListeArr)
 

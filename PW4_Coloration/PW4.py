@@ -1,43 +1,54 @@
 #!/usr/bin/env python3
 import unittest
 
-def plusPetitEnDehorsDe(List):
+def plusPetitEnDehorsDe(List: set):
     sortedList = sorted(List)
     for i in range(1, len(sortedList) + 2):
         if i not in sortedList:
             return i
+    return 1
 
-def colorNaive(Graphe):
+def colorNaive(Graphe: dict):
     coloration = dict()
-
     for sommet in Graphe:
-        couleursDesVoisins = set()
+        couleurVoisins = set()
         for voisin in Graphe[sommet]:
-            couleursDesVoisins.add(coloration[voisin])
+            if voisin in coloration:
+                couleurVoisins.add(coloration[voisin])
 
-        coloration[sommet] = plusPetitEnDehorsDe(couleursDesVoisins)
+        coloration[sommet] = plusPetitEnDehorsDe(couleurVoisins)
 
     return coloration
 
-def noyau(L, Graphe):
+def noyau(Sommets: set, Graphe: dict):
+    Sommets = Sommets.copy()
     Noyau = set()
+    while Sommets:
+        sommet = Sommets.pop()
+        Noyau.add(sommet)
+        for voisin in Graphe[sommet]:
+            if voisin in Sommets:
+                Sommets.remove(voisin)
+
     return Noyau
 
-def colorGlouton(Graphe):
-    color = {}  # Dictionnaire des couleurs
-    S = set(Graphe.keys())  # ensemble des sommets restant à colorier
-    return color
-
-def colorWP(Graphe):
-    color = {1: 1}  # Dictionnaire des couleurs
-    # Calcul des degrés
-    Deg = {}
+def colorGlouton(Graphe: dict):
+    coloration = dict()
+    Sommets = set()
     for sommet in Graphe:
-        Deg[sommet] = len(Graphe[sommet])
-    # on trie par degré décroissant
-    # for sommet in sorted(Deg, key=Deg.get, reverse=True):
+        Sommets.add(sommet)
 
-    return color
+    noyau(Sommets, Graphe)
+
+    couleur = 1
+    while Sommets:
+        for sommet in noyau(Sommets, Graphe):
+            coloration[sommet] = couleur
+            Sommets.remove(sommet)
+
+        couleur += 1
+
+    return coloration
 
 class GrapheTest(unittest.TestCase):
 
@@ -65,9 +76,6 @@ class GrapheTest(unittest.TestCase):
         self.assertEqual(noyau({5, 8, 9}, self.Petersen), {5, 8, 9})
         self.assertEqual(colorGlouton(self.Petersen), {1: 1, 2: 2, 3: 1, 4: 2, 5: 3, 6: 2, 7: 1, 8: 3, 9: 3, 10: 2})
         self.assertEqual(colorGlouton(self.G), {1: 1, 2: 2, 3: 3, 4: 4, 5: 1, 6: 1, 7: 2})
-
-    def testWP(self):
-        self.assertEqual(colorWP(self.G), {1: 1, 2: 3, 3: 2, 4: 4, 5: 1, 6: 1, 7: 2})
 
 if __name__ == '__main__':
     unittest.main()
