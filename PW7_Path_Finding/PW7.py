@@ -6,11 +6,10 @@ def arcToListe(ListeArc: list):
     Poids = dict()
 
     for arc in ListeArc:
-        if arc[0] not in Graphe:
-            Graphe[arc[0]] = [arc[1]]
-        else:
+        if arc[0] in Graphe:
             Graphe[arc[0]].append(arc[1])
-
+        else:
+            Graphe[arc[0]] = [arc[1]]
         Poids[(arc[0], arc[1])] = arc[2]
 
     return Graphe, Poids
@@ -19,16 +18,17 @@ def Dijkstra(Graphe: dict, Poids: dict, Sommet: int):
     Distance = dict()
     Peres = dict()
     File = deque([Sommet])
-    Distance[Sommet] = 0
+
     Peres[Sommet] = Sommet
+    Distance[Sommet] = 0
 
     while File:
         sommet = File.popleft()
         for successeur in Graphe[sommet]:
-            if successeur not in Distance or Poids[sommet, successeur] + Distance[sommet] < Distance[successeur]:
-                Distance[successeur] = Poids[sommet, successeur] + Distance[sommet]
-                Peres[successeur] = sommet
+            if successeur not in Peres or Poids[(sommet, successeur)] + Distance[sommet] < Distance[successeur]:
                 File.append(successeur)
+                Peres[successeur] = sommet
+                Distance[successeur] = Poids[(sommet, successeur)] + Distance[sommet]
 
     return Distance, Peres
 
@@ -53,12 +53,6 @@ def arcToListe2(ListeArc: list):
         Poids[(arc[0], arc[1])] = arc[2]
 
     return Pred, Graphe, Poids
-
-def Bellman(Pred, Graphe, Poids, Sommets):
-    Distance = dict()
-    Peres = dict()
-
-    return Distance, Peres
 
 class GrapheTest(unittest.TestCase):
 

@@ -7,8 +7,8 @@ def areteToListe(ListeArr: list):
     Graphe = dict()
 
     for arrete in ListeArr:
-        Poids[(arrete[0], arrete[1])] = arrete[2]
-        Poids[(arrete[1], arrete[0])] = arrete[2]
+        Poids[arrete[0], arrete[1]] = arrete[2]
+        Poids[arrete[1], arrete[0]] = arrete[2]
 
         if arrete[0] not in Graphe:
             Graphe[arrete[0]] = [arrete[1]]
@@ -30,7 +30,6 @@ def Kruskal(nbSommet: int, ListeArr: list):
 
     while len(result) < nbSommet:
         arrete = ListeArr.pop(0)
-
         ajoutArete(result, arrete[0], arrete[1])
         if isCyclic(result):
             enleveArete(result, arrete[0], arrete[1])
@@ -39,17 +38,48 @@ def Kruskal(nbSommet: int, ListeArr: list):
 
     return result, poid
 
+def minimise(Dist: dict):
+    y = -1
+    poidsMini = float('inf')
+    for sommet in Dist:
+        if Dist[sommet] != 0 and Dist[sommet] < poidsMini:
+            y = sommet
+            poidsMini = Dist[sommet]
+
+    return y
+
 def Prim(ListeArr: list):
     result = dict()
-    Graphe, Poids = areteToListe(ListeArr)
+    poid = 0
+    (Graphe, Poids) = areteToListe(ListeArr)
+    nbArrete = 0
+    Dist = dict()
+    for sommet in Graphe:
+        Dist[sommet] = float('inf')
+    Dist[1] = 0
 
-    distance = dict()
-    peres = dict()
-    for i in range(1, len(Graphe) + 1):
-        distance[i] = -1
-        peres[i] = 1
+    Min = dict()
+    for sommet in Graphe:
+        Min[sommet] = 1
 
-    return result, 0
+    for voisin in Graphe[1]:
+        Dist[voisin] = Poids[(1, voisin)]
+
+    while nbArrete < len(Graphe) - 1:
+        sommetLePlusProche = minimise(Dist)
+        entecedantSommetProche = Min[sommetLePlusProche]
+
+        ajoutArete(result, entecedantSommetProche, sommetLePlusProche)
+        nbArrete += 1
+        poid += Poids[(entecedantSommetProche, sommetLePlusProche)]
+        Dist[sommetLePlusProche] = 0
+
+        for voisin in Graphe[sommetLePlusProche]:
+            if Dist[voisin] > Poids[sommetLePlusProche, voisin]:
+                Dist[voisin] = Poids[sommetLePlusProche, voisin]
+                Min[voisin] = sommetLePlusProche
+
+    return result, poid
 
 class GrapheTest(unittest.TestCase):
 
